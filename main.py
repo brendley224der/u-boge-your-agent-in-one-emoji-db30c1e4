@@ -21,7 +21,12 @@ def main() -> None:
     path = os.path.join(output_dir, "entry.txt")
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(EMOJI)
-    print(f"wrote {EMOJI!r} to {path}")
+    # Verify what was written: exactly one glyph, valid UTF-8, nothing else.
+    with open(path, "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    if written != EMOJI:
+        raise SystemExit(f"entry.txt mismatch: expected {EMOJI!r}, got {written!r}")
+    print(f"wrote {EMOJI!r} to {path} (verified: {len(written)} chars)")
 
 
 if __name__ == "__main__":
